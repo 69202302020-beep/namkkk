@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="th" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio - ชลธิชา จันทร์เพ็ง</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Prompt สำหรับความ Modern Minimal -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Phosphor Icons (Minimal Icons) -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <!-- Tailwind Config สำหรับกำหนด Theme สีพาสเทลน่ารักๆ -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Prompt', 'sans-serif'],
+                    },
+                    colors: {
+                        pastel: {
+                            pink: '#ffa8ba',     // สีชมพูหลัก
+                            lightPink: '#ffe5ec', // สีชมพูอ่อนแบคกราว
+                            peach: '#ffc2d1',    // สีพีชตกแต่ง
+                            blue: '#a2d2ff',     // สีฟ้าตัด
+                            purple: '#cdb4db',   // สีม่วงตัด
+                            text: '#475569',     // สีข้อความหลัก (Slate 600)
+                            heading: '#1e293b',  // สีหัวข้อ (Slate 800)
+                            bg: '#f8fafc'        // สีพื้นหลังเว็บ (Slate 50)
+                        }
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: theme('colors.pastel.bg');
+            color: theme('colors.pastel.text');
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* การ์ดสไตล์ Minimal */
+        .minimal-card {
+            background: white;
+            border-radius: 1.5rem;
+            box-shadow: theme('boxShadow.soft');
+            border: 1px solid rgba(255, 168, 186, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .minimal-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px -5px rgba(255, 168, 186, 0.15);
+        }
+
+        /* ตกแต่งเส้นใต้หัวข้อแบบน่ารัก */
+        .cute-underline {
+            position: relative;
+            display: inline-block;
+            z-index: 1;
+        }
+        .cute-underline::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 10px;
+            bottom: 2px;
+            left: 0;
+            background-color: theme('colors.pastel.lightPink');
+            z-index: -1;
+            border-radius: 4px;
+            transform: rotate(-1deg);
+        }
+
+        /* Animation พื้นหลังลอยๆ */
+        @keyframes blob {
+            0% { transform: translate(0px, 0px) scale(1); }
+            33% { transform: translate(30px, -50px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+            100% { transform: translate(0px, 0px) scale(1); }
+        }
+        .animate-blob {
+            animation: blob 7s infinite;
+        }
+        .animation-delay-2000 {
+            animation-delay: 2s;
+        }
+        .animation-delay-4000 {
+            animation-delay: 4s;
+        }
+    </style>
+</head>
+<body class="relative">
+
+    <nav class="fixed w-full z-50 bg-white/80 backdrop-blur-md border-b border-pastel-lightPink transition-all duration-300">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <!-- Logo / Name -->
+                <a href="#home" class="flex items-center gap-2 font-bold text-xl text-pastel-heading">
+                    <i class="ph-fill ph-heart text-pastel-pink text-2xl"></i>
+                    Chonthicha<span class="text-pastel-pink">.</span>
+                </a>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex space-x-8">
+                    <a href="#home" class="text-pastel-text hover:text-pastel-pink font-medium transition-colors">หน้าแรก</a>
+                    <a href="#profile" class="text-pastel-text hover:text-pastel-pink font-medium transition-colors">ข้อมูลส่วนตัว</a>
+                    <a href="#education" class="text-pastel-text hover:text-pastel-pink font-medium transition-colors">การศึกษา</a>
+                    <a href="#activities" class="text-pastel-text hover:text-pastel-pink font-medium transition-colors">กิจกรรม</a>
+                    <a href="#certificates" class="text-pastel-text hover:text-pastel-pink font-medium transition-colors">เกียรติบัตร</a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-pastel-text focus:outline-none">
+                        <i class="ph ph-list text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-50 shadow-lg absolute w-full">
+            <div class="px-4 py-2 space-y-1">
+                <a href="#home" class="block px-3 py-2 text-base font-medium text-pastel-text hover:bg-pastel-lightPink hover:text-pastel-pink rounded-lg">หน้าแรก</a>
+                <a href="#profile" class="block px-3 py-2 text-base font-medium text-pastel-text hover:bg-pastel-lightPink hover:text-pastel-pink rounded-lg">ข้อมูลส่วนตัว</a>
+                <a href="#education" class="block px-3 py-2 text-base font-medium text-pastel-text hover:bg-pastel-lightPink hover:text-pastel-pink rounded-lg">การศึกษา</a>
+                <a href="#activities" class="block px-3 py-2 text-base font-medium text-pastel-text hover:bg-pastel-lightPink hover:text-pastel-pink rounded-lg">กิจกรรม</a>
+                <a href="#certificates" class="block px-3 py-2 text-base font-medium text-pastel-text hover:bg-pastel-lightPink hover:text-pastel-pink rounded-lg">เกียรติบัตร</a>
+            </div>
+        </div>
+    </nav>
+
+    <section id="home" class="pt-32 pb-20 md:pt-40 md:pb-32 relative overflow-hidden">
+        <!-- Background Blobs -->
+        <div class="absolute top-0 -left-4 w-72 h-72 bg-pastel-lightPink rounded-full mix-blend-multiply filter blur-2xl opacity-70 animate-blob z-0"></div>
+        <div class="absolute top-0 -right-4 w-72 h-72 bg-purple-100 rounded-full mix-blend-multiply filter blur-2xl opacity-70 animate-blob animation-delay-2000 z-0"></div>
+        <div class="absolute -bottom-8 left-20 w-72 h-72 bg-pastel-peach rounded-full mix-blend-multiply filter blur-2xl opacity-70 animate-blob animation-delay-4000 z-0"></div>
+
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="flex flex-col-reverse md:flex-row items-center justify-between gap-12">
+                
+                <!-- Text Content -->
+                <div class="flex-1 text-center md:text-left">
+                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white shadow-sm border border-pastel-lightPink text-pastel-pink text-sm font-medium mb-6">
+                        <i class="ph-fill ph-sparkle"></i>
+                        <span>PORTFOLIO 2024</span>
+                    </div>
+                    
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-pastel-heading mb-4 leading-tight">
+                        สวัสดีค่ะ, ฉันชื่อ <br>
+                        <span class="text-pastel-pink">ชลธิชา จันทร์เพ็ง</span> (น้ำ)
+                    </h1>
+                    
+                    <div class="space-y-2 mb-8">
+                        <p class="text-lg md:text-xl font-medium text-pastel-text">
+                            มุ่งมั่นสู่ <span class="text-pastel-heading font-bold">คณะสาธารณสุขศาสตร์และสหเวชศาสตร์</span>
+                        </p>
+                        <p class="text-lg text-pastel-text">สาขา สาธารณสุขชุมชน</p>
+                        <div class="flex items-center justify-center md:justify-start gap-2 text-pastel-pink mt-2">
+                            <i class="ph-fill ph-map-pin"></i>
+                            <span class="font-medium">วิทยาลัยการสาธารณสุขสิรินธร จังหวัดขอนแก่น</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-center md:justify-start gap-4">
+                        <a href="#profile" class="px-8 py-3 bg-pastel-pink text-white rounded-full font-medium shadow-md shadow-pink-200 hover:bg-pink-400 transition-all hover:-translate-y-1">
+                            ทำความรู้จักฉัน
+                        </a>
+                        <a href="#activities" class="px-8 py-3 bg-white text-pastel-text border border-gray-200 rounded-full font-medium hover:border-pastel-pink hover:text-pastel-pink transition-all">
+                            ดูผลงาน
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Profile Image -->
+                <div class="w-72 h-72 md:w-96 md:h-96 relative flex-shrink-0">
+                    <div class="absolute inset-0 bg-pastel-lightPink rounded-[3rem] transform rotate-3"></div>
+                    <div class="absolute inset-0 bg-white rounded-[3rem] shadow-soft border-8 border-white overflow-hidden transform -rotate-3 transition-transform hover:rotate-0 duration-500">
+                        <!-- คำแนะนำ: ใส่ลิงก์รูปของคุณที่นี่ (เช่น อัปโหลดรูปลงเว็บฝากรูปแล้วเอาลิงก์มาใส่ตรง src="") -->
+                        <img src="https://placehold.co/600x800/ffe5ec/ffa8ba?text=ใส่รูปภาพ\nชลธิชา+จันทร์เพ็ง" alt="ชลธิชา จันทร์เพ็ง" class="w-full h-full object-cover">
+                    </div>
+                    <!-- Cute Badge -->
+                    <div class="absolute -bottom-4 -left-4 bg-white p-3 rounded-2xl shadow-soft border border-gray-50 flex items-center gap-3">
+                        <div class="w-12 h-12 bg-pastel-lightPink text-pastel-pink rounded-xl flex items-center justify-center text-2xl">
+                            <i class="ph-fill ph-stethoscope"></i>
+                        </div>
+                        <div class="text-sm font-bold text-pastel-heading leading-tight pr-2">Future<br><span class="text-pastel-text font-normal text-xs">Public Health</span></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="profile" class="py-20 bg-white">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-pastel-heading inline-block cute-underline">ข้อมูลส่วนตัว</h2>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Personal Data Card -->
+                <div class="minimal-card p-8">
+                    <div class="flex items-center gap-3 mb-6">
+                        <i class="ph-fill ph-identification-card text-3xl text-pastel-blue"></i>
+                        <h3 class="text-2xl font-bold text-pastel-heading">ประวัติส่วนตัว</h3>
+                    </div>
+                    
+                    <div class="space-y-4 text-pastel-text">
+                        <div class="flex border-b border-gray-100 pb-3">
+                            <span class="w-1/3 font-medium">ชื่อ-นามสกุล</span>
+                            <span class="w-2/3 text-pastel-heading">นางสาว ชลธิชา จันทร์เพ็ง</span>
+                        </div>
+                        <div class="flex border-b border-gray-100 pb-3">
+                            <span class="w-1/3 font-medium">ชื่อเล่น</span>
+                            <span class="w-2/3 text-pastel-heading">น้ำ</span>
+                        </div>
+                        <div class="flex border-b border-gray-100 pb-3">
+                            <span class="w-1/3 font-medium">วันเกิด</span>
+                            <span class="w-2/3 text-pastel-heading">วันที่ 2 (อายุ 19 ปี)</span>
+                        </div>
+                        <div class="flex border-b border-gray-100 pb-3">
+                            <span class="w-1/3 font-medium">สัญชาติ/ศาสนา</span>
+                            <span class="w-2/3 text-pastel-heading">ไทย / พุทธ</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 mb-4">
+                        <h4 class="text-lg font-bold text-pastel-heading flex items-center gap-2 mb-4">
+                            <i class="ph-fill ph-users text-pastel-purple text-xl"></i> ข้อมูลครอบครัว
+                        </h4>
+                        <div class="space-y-3 text-pastel-text bg-pastel-bg p-4 rounded-xl border border-gray-100">
+                            <div class="flex flex-col sm:flex-row sm:justify-between">
+                                <span class="font-medium">บิดา: นายธวัช จันทร์เพ็ง</span>
+                                <span class="text-sm bg-white px-2 py-1 rounded shadow-sm">อาชีพ: เกษตรกร</span>
+                            </div>
+                            <div class="flex flex-col sm:flex-row sm:justify-between">
+                                <span class="font-medium">มารดา: นางรัดดาบส จันทร์เพ็ง</span>
+                                <span class="text-sm bg-white px-2 py-1 rounded shadow-sm">อาชีพ: รับจ้าง</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hobbies & Skills Card -->
+                <div class="minimal-card p-8 flex flex-col justify-center">
+                    <div class="flex items-center gap-3 mb-8">
+                        <i class="ph-fill ph-star text-3xl text-yellow-400"></i>
+                        <h3 class="text-2xl font-bold text-pastel-heading">ความสามารถ & งานอดิเรก</h3>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <!-- Hobby 1 -->
+                        <div class="bg-pastel-bg hover:bg-pastel-lightPink transition-colors p-6 rounded-2xl flex flex-col items-center justify-center text-center gap-3 border border-gray-100 group">
+                            <div class="w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-sm text-pastel-pink text-3xl group-hover:scale-110 transition-transform">
+                                <i class="ph-fill ph-palette"></i>
+                            </div>
+                            <span class="font-medium text-pastel-heading">วาดรูป</span>
+                        </div>
+                        <!-- Hobby 2 -->
+                        <div class="bg-pastel-bg hover:bg-purple-50 transition-colors p-6 rounded-2xl flex flex-col items-center justify-center text-center gap-3 border border-gray-100 group">
+                            <div class="w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-sm text-pastel-purple text-3xl group-hover:scale-110 transition-transform">
+                                <i class="ph-fill ph-headphones"></i>
+                            </div>
+                            <span class="font-medium text-pastel-heading">ฟังเพลง</span>
+                        </div>
+                        <!-- Hobby 3 -->
+                        <div class="bg-pastel-bg hover:bg-blue-50 transition-colors p-6 rounded-2xl flex flex-col items-center justify-center text-center gap-3 border border-gray-100 group">
+                            <div class="w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-sm text-pastel-blue text-3xl group-hover:scale-110 transition-transform">
+                                <i class="ph-fill ph-tennis-ball"></i>
+                            </div>
+                            <span class="font-medium text-pastel-heading">เล่นแบดมินตัน</span>
+                        </div>
+                        <!-- Hobby 4 -->
+                        <div class="bg-pastel-bg hover:bg-green-50 transition-colors p-6 rounded-2xl flex flex-col items-center justify-center text-center gap-3 border border-gray-100 group">
+                            <div class="w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-sm text-green-400 text-3xl group-hover:scale-110 transition-transform">
+                                <i class="ph-fill ph-book-open-text"></i>
+                            </div>
+                            <span class="font-medium text-pastel-heading">อ่านหนังสือ</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="education" class="py-20 bg-pastel-bg">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-pastel-heading inline-block cute-underline">ประวัติการศึกษา</h2>
+            </div>
+            
+            <div class="relative wrap overflow-hidden p-4">
+                <!-- เส้นแกนกลาง -->
+                <div class="absolute h-full border-2 border-pastel-lightPink" style="left: 50%; transform: translateX(-50%); border-radius: 10px;"></div>
+                
+                <!-- ชั้นอนุบาล -->
+                <div class="mb-8 flex justify-between items-center w-full right-timeline">
+                    <div class="order-1 w-5/12"></div>
+                    <div class="z-20 flex items-center order-1 bg-pastel-peach text-white w-10 h-10 rounded-full justify-center shadow-md">
+                        <i class="ph-fill ph-baby text-xl"></i>
+                    </div>
+                    <div class="order-1 minimal-card w-5/12 px-6 py-4 text-left">
+                        <p class="text-xs font-bold text-pastel-pink mb-1">สำเร็จการศึกษาปี 2553</p>
+                        <h3 class="font-bold text-pastel-heading text-lg">ระดับอนุบาล</h3>
+                        <p class="text-pastel-text text-sm">โรงเรียนอนุบาลปานทิพย์</p>
+                    </div>
+                </div>
+
+                <!-- ชั้นประถม -->
+                <div class="mb-8 flex justify-between flex-row-reverse items-center w-full left-timeline">
+                    <div class="order-1 w-5/12"></div>
+                    <div class="z-20 flex items-center order-1 bg-pastel-blue text-white w-10 h-10 rounded-full justify-center shadow-md">
+                        <i class="ph-fill ph-backpack text-xl"></i>
+                    </div>
+                    <div class="order-1 minimal-card w-5/12 px-6 py-4 text-right">
+                        <p class="text-xs font-bold text-pastel-blue mb-1">สำเร็จการศึกษาปี 2562</p>
+                        <h3 class="font-bold text-pastel-heading text-lg">ระดับประถมศึกษา</h3>
+                        <p class="text-pastel-text text-sm">โรงเรียนอนุบาลอภิริดี</p>
+                    </div>
+                </div>
+                
+                <!-- ชั้นม.ต้น -->
+                <div class="mb-8 flex justify-between items-center w-full right-timeline">
+                    <div class="order-1 w-5/12"></div>
+                    <div class="z-20 flex items-center order-1 bg-pastel-purple text-white w-10 h-10 rounded-full justify-center shadow-md">
+                        <i class="ph-fill ph-books text-xl"></i>
+                    </div>
+                    <div class="order-1 minimal-card w-5/12 px-6 py-4 text-left">
+                        <p class="text-xs font-bold text-pastel-purple mb-1">สำเร็จการศึกษาปี 2565</p>
+                        <h3 class="font-bold text-pastel-heading text-lg">มัธยมศึกษาตอนต้น</h3>
+                        <p class="text-pastel-text text-sm">โรงเรียนศรีเสมาวิทยาเสริม</p>
+                    </div>
+                </div>
+
+                <!-- ชั้นม.ปลาย -->
+                <div class="mb-8 flex justify-between flex-row-reverse items-center w-full left-timeline">
+                    <div class="order-1 w-5/12"></div>
+                    <div class="z-20 flex items-center order-1 bg-pastel-pink text-white w-12 h-12 rounded-full justify-center shadow-lg ring-4 ring-pastel-lightPink">
+                        <i class="ph-fill ph-graduation-cap text-2xl"></i>
+                    </div>
+                    <div class="order-1 minimal-card border-2 border-pastel-pink w-5/12 px-6 py-5 text-right relative overflow-hidden">
+                        <!-- แบ็คกราววงกลมตกแต่งการ์ดปัจจุบัน -->
+                        <div class="absolute -top-6 -right-6 w-16 h-16 bg-pastel-lightPink rounded-full z-0 opacity-50"></div>
+                        
+                        <p class="text-xs font-bold text-pastel-pink mb-1 relative z-10">กำลังศึกษา (ปัจจุบัน)</p>
+                        <h3 class="font-bold text-pastel-heading text-lg relative z-10">มัธยมศึกษาตอนปลาย</h3>
+                        <p class="text-pastel-text text-sm relative z-10">โรงเรียนศรีเสมาวิทยาเสริม</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="activities" class="py-20 bg-white">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-pastel-heading inline-block cute-underline">กิจกรรมและประสบการณ์</h2>
+                <p class="mt-4 text-pastel-text max-w-2xl mx-auto">ประสบการณ์ที่หล่อหลอมให้ฉันพร้อมสำหรับสายวิชาชีพสาธารณสุข</p>
+            </div>
+
+            <!-- 2 กิจกรรมหลักที่โดดเด่นสุด (CPR & อนามัย) -->
+            <div class="grid md:grid-cols-2 gap-8 mb-12">
+                
+                <!-- Highlight 1: CPR -->
+                <div class="minimal-card overflow-hidden group flex flex-col h-full">
+                    <div class="h-56 bg-gray-100 relative overflow-hidden">
+                        <!-- คำแนะนำ: ใส่รูปภาพตอนแข่ง CPR -->
+                        <img src="https://placehold.co/800x500/ffc2d1/ffffff?text=รูปภาพการแข่งขัน\nCPR+Challenge" alt="การแข่งขัน CPR" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        <div class="absolute top-4 left-4 bg-white/90 backdrop-blur text-yellow-500 font-bold px-4 py-1.5 rounded-full shadow-sm text-sm flex items-center gap-1">
+                            <i class="ph-fill ph-trophy"></i> ชนะเลิศอันดับ 1
+                        </div>
+                    </div>
+                    <div class="p-6 md:p-8 flex-1 flex flex-col">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-xs font-bold text-pastel-pink bg-pastel-lightPink px-2 py-1 rounded">ปีการศึกษา 2568</span>
+                        </div>
+                        <h3 class="text-xl md:text-2xl font-bold text-pastel-heading mb-3">การแข่งขัน CPR Challenge Season 5</h3>
+                        <p class="text-pastel-text text-sm md:text-base leading-relaxed mb-4 flex-1">
+                            ร่วมกับมูลนิธิการแพทย์ฉุกเฉินจังหวัดขอนแก่น ได้รับรางวัลชนะเลิศจากการแข่งขันการช่วยฟื้นคืนชีพขั้นพื้นฐาน (CPR) ทำให้มีความรู้และทักษะที่สามารถนำไปช่วยเหลือผู้อื่นในยามฉุกเฉินได้จริง
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Highlight 2: จิตอาสาอนามัย -->
+                <div class="minimal-card overflow-hidden group flex flex-col h-full">
+                    <div class="h-56 bg-gray-100 relative overflow-hidden">
+                        <!-- คำแนะนำ: ใส่รูปภาพตอนเป็นจิตอาสาอนามัย -->
+                        <img src="https://placehold.co/800x500/a2d2ff/ffffff?text=รูปภาพจิตอาสา\nณ+อนามัยชุมชน" alt="จิตอาสาอนามัย" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        <div class="absolute top-4 left-4 bg-white/90 backdrop-blur text-pastel-blue font-bold px-4 py-1.5 rounded-full shadow-sm text-sm flex items-center gap-1">
+                            <i class="ph-fill ph-heartbeat"></i> ประสบการณ์วิชาชีพ
+                        </div>
+                    </div>
+                    <div class="p-6 md:p-8 flex-1 flex flex-col">
+                        <h3 class="text-xl md:text-2xl font-bold text-pastel-heading mb-3 mt-4">จิตอาสา ณ อนามัยชุมชน</h3>
+                        <p class="text-pastel-text text-sm md:text-base leading-relaxed mb-4 flex-1">
+                            ได้มีโอกาสทำหน้าที่จิตอาสา ช่วยวัดความดัน ซักประวัติเบื้องต้น ติดชื่อป้ายยา ทำให้เข้าใจการทำงานของบุคลากรทางการแพทย์อย่างแท้จริง ได้ฝึกทั้งทฤษฎีและปฏิบัติ และเกิดความรักในอาชีพสายสาธารณสุขมากยิ่งขึ้น
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-8 flex items-center gap-3">
+                <i class="ph-fill ph-star-four text-xl text-pastel-peach"></i>
+                <h3 class="text-2xl font-bold text-pastel-heading">กิจกรรมอื่นๆ ภายในโรงเรียนและชุมชน</h3>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Activity: สภานักเรียน -->
+                <div class="bg-pastel-bg rounded-2xl p-5 border border-gray-100 hover:border-pastel-pink transition-colors">
+                    <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-pastel-pink text-2xl mb-4 shadow-sm">
+                        <i class="ph-fill ph-users-three"></i>
+                    </div>
+                    <h4 class="font-bold text-pastel-heading mb-2">คณะกรรมการสภานักเรียน (ปี 2567)</h4>
+                    <p class="text-sm text-pastel-text line-clamp-3">ปฏิบัติหน้าที่สภานักเรียน ได้เรียนรู้ศักยภาพความเป็นผู้นำ กล้าแสดงออก รับผิดชอบหน้าที่ จัดกิจกรรมต่างๆ เช่น งานวันแม่, รับบัณฑิต, ปัจฉิม, และวันลอยกระทง</p>
+                </div>
+                
+                <!-- Activity: ชีววิทยา -->
+                <div class="bg-pastel-bg rounded-2xl p-5 border border-gray-100 hover:border-pastel-purple transition-colors">
+                    <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-pastel-purple text-2xl mb-4 shadow-sm">
+                        <i class="ph-fill ph-microscope"></i>
+                    </div>
+                    <h4 class="font-bold text-pastel-heading mb-2">ปฏิบัติการวิชาชีววิทยา</h4>
+                    <p class="text-sm text-pastel-text line-clamp-3">ทำแลปผ่าตัดหัวใจหมู เพื่อศึกษาโครงสร้างของอวัยวะภายในและภายนอกอย่างละเอียด ฝึกทักษะกระบวนการทางวิทยาศาสตร์</p>
+                </div>
+
+                <!-- Activity: แห่เทียน -->
+                <div class="bg-pastel-bg rounded-2xl p-5 border border-gray-100 hover:border-yellow-400 transition-colors">
+                    <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-yellow-500 text-2xl mb-4 shadow-sm">
+                        <i class="ph-fill ph-hands-praying"></i>
+                    </div>
+                    <h4 class="font-bold text-pastel-heading mb-2">กิจกรรมส่งเสริมศิลปวัฒนธรรม</h4>
+                    <p class="text-sm text-pastel-text line-clamp-3">เข้าร่วมอบรมสัมมนาศิลปวัฒนธรรม โครงการประเพณีไหมผูกเสี่ยว (2567) และได้รับหน้าที่เป็นนางรำในวันแห่เทียนพรรษา (2566)</p>
+                </div>
+
+                <!-- Activity: จิตอาสาโรงเรียน -->
+                <div class="bg-pastel-bg rounded-2xl p-5 border border-gray-100 hover:border-green-400 transition-colors">
+                    <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-green-500 text-2xl mb-4 shadow-sm">
+                        <i class="ph-fill ph-plant"></i>
+                    </div>
+                    <h4 class="font-bold text-pastel-heading mb-2">กิจกรรมเพื่อส่วนรวม</h4>
+                    <p class="text-sm text-pastel-text">เข้าร่วมกิจกรรมปลูกข้าววันแม่เก็บเกี่ยววันพ่อ (2568), เข้าเวรหน้าโรงเรียนตอนเช้า, จัดสถานที่วันคริสต์มาส และทาสีดอกบัว</p>
+                </div>
+
+                <!-- Activity: กีฬาสี/สันทนาการ -->
+                <div class="bg-pastel-bg rounded-2xl p-5 border border-gray-100 hover:border-pastel-blue transition-colors">
+                    <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-pastel-blue text-2xl mb-4 shadow-sm">
+                        <i class="ph-fill ph-mega-phone"></i>
+                    </div>
+                    <h4 class="font-bold text-pastel-heading mb-2">กิจกรรมกีฬาสี & รับน้อง</h4>
+                    <p class="text-sm text-pastel-text">เป็นตัวแทนถือป้ายสีคณะสีเขียวในงานกีฬาสี และทำหน้าที่เป็นพี่สันทนาการในกิจกรรมรับน้องสานสัมพันธ์ (2567)</p>
+                </div>
+
+                <!-- Activity: ศึกษาดูงาน -->
+                <div class="bg-pastel-bg rounded-2xl p-5 border border-gray-100 hover:border-orange-400 transition-colors">
+                    <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-orange-400 text-2xl mb-4 shadow-sm">
+                        <i class="ph-fill ph-bus"></i>
+                    </div>
+                    <h4 class="font-bold text-pastel-heading mb-2">ทัศนศึกษาและวันสำคัญ</h4>
+                    <p class="text-sm text-pastel-text">เข้าร่วมกิจกรรมทัศนศึกษา (2568), ไปศึกษาดูงานวัดป่าธรรมอุทยาน, เข้าร่วมกิจกรรมวันเวียนเทียน และวันต่อต้านยาเสพติด</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="certificates" class="py-20 bg-pastel-bg">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-pastel-heading inline-block cute-underline">เกียรติบัตรและรางวัล</h2>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+                <!-- Certificate 1 -->
+                <div class="minimal-card p-2 group relative overflow-hidden">
+                    <img src="https://placehold.co/400x560/f1f5f9/94a3b8?text=เกียรติบัตร\nด้านมีวินัย" alt="เกียรติบัตรด้านมีวินัย" class="w-full h-auto rounded-xl">
+                    <div class="absolute inset-2 bg-pastel-heading/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 rounded-xl transition-opacity duration-300 flex flex-col items-center justify-center text-white text-center p-4">
+                        <i class="ph-fill ph-medal text-3xl text-yellow-400 mb-2"></i>
+                        <span class="font-bold text-sm md:text-base">รางวัลด้านมีวินัย</span>
+                        <span class="text-xs text-gray-200 mt-1">ปีการศึกษา 2568</span>
+                    </div>
+                </div>
+                
+                <!-- Certificate 2 -->
+                <div class="minimal-card p-2 group relative overflow-hidden">
+                    <img src="https://placehold.co/400x560/f1f5f9/94a3b8?text=เกียรติบัตร\nความมีจิตสาธารณะ" alt="เกียรติบัตรด้านจิตสาธารณะ" class="w-full h-auto rounded-xl">
+                    <div class="absolute inset-2 bg-pastel-heading/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 rounded-xl transition-opacity duration-300 flex flex-col items-center justify-center text-white text-center p-4">
+                        <i class="ph-fill ph-heart text-3xl text-pastel-pink mb-2"></i>
+                        <span class="font-bold text-sm md:text-base">รางวัลด้านความมีจิตสาธารณะ</span>
+                        <span class="text-xs text-gray-200 mt-1">ปีการศึกษา 2567</span>
+                    </div>
+                </div>
+
+                <!-- Certificate 3 -->
+                <div class="minimal-card p-2 group relative overflow-hidden">
+                    <img src="https://placehold.co/400x560/f1f5f9/94a3b8?text=เกียรติบัตร\nประพฤติตัวเป็นแบบอย่างที่ดี" alt="แบบอย่างที่ดี" class="w-full h-auto rounded-xl">
+                    <div class="absolute inset-2 bg-pastel-heading/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 rounded-xl transition-opacity duration-300 flex flex-col items-center justify-center text-white text-center p-4">
+                        <i class="ph-fill ph-star text-3xl text-yellow-400 mb-2"></i>
+                        <span class="font-bold text-sm md:text-base">รางวัลประพฤติตัวเป็นแบบอย่างที่ดี</span>
+                        <span class="text-xs text-gray-200 mt-1">ปีการศึกษา 2566</span>
+                    </div>
+                </div>
+
+                <!-- Certificate 4 -->
+                <div class="minimal-card p-2 group relative overflow-hidden">
+                    <img src="https://placehold.co/400x560/f1f5f9/94a3b8?text=เกียรติบัตร\nชนะเลิศวาดภาพ\nวันวิทยาศาสตร์" alt="ชนะเลิศวาดภาพ" class="w-full h-auto rounded-xl">
+                    <div class="absolute inset-2 bg-pastel-heading/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 rounded-xl transition-opacity duration-300 flex flex-col items-center justify-center text-white text-center p-4">
+                        <i class="ph-fill ph-trophy text-3xl text-yellow-400 mb-2"></i>
+                        <span class="font-bold text-sm md:text-base">ชนะเลิศอันดับ 1</span>
+                        <span class="text-xs text-gray-200 mt-1">การประกวดภาพวันวิทยาศาสตร์ (2566)</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- List of other certificates -->
+            <div class="mt-8 bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+                <h4 class="font-bold text-pastel-heading mb-3 flex items-center gap-2">
+                    <i class="ph-fill ph-certificate text-pastel-purple text-xl"></i> ผลงานและเกียรติบัตรอื่นๆ
+                </h4>
+                <ul class="grid md:grid-cols-2 gap-2 text-sm text-pastel-text list-disc list-inside">
+                    <li>ได้รับการยกย่องว่าได้รับรางวัลรองชนะเลิศอันดับ 2 การประกวดการ์ดคริสต์มาส (2566)</li>
+                    <li>ชนะเลิศการประกวดวาดภาพ ในช่วงกิจกรรมการ์ดคริสต์มาส (2566)</li>
+                    <li>เข้าร่วมกิจกรรมการแข่งขันพินิจวรรณคดี (2567)</li>
+                    <li>เข้าร่วมอบรมสัมมนาศิลปวัฒนธรรม (2567)</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-pastel-heading text-white py-16 text-center relative overflow-hidden">
+        <!-- Decoration -->
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-lg h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+        
+        <div class="max-w-4xl mx-auto px-4 relative z-10">
+            <!-- Quotes -->
+            <div class="mb-12 space-y-6">
+                <div class="flex justify-center mb-4">
+                    <i class="ph-fill ph-quotes text-4xl text-pastel-pink opacity-50"></i>
+                </div>
+                <p class="text-lg md:text-xl font-light text-gray-200 italic leading-relaxed max-w-2xl mx-auto">
+                    "อย่าหยุดที่จะฝันและตั้งเป้าหมาย <br class="hidden md:block">การพัฒนาตนเองคือการทำให้ความฝันนั้นเป็นจริง"
+                </p>
+                <p class="text-lg md:text-xl font-light text-gray-200 italic leading-relaxed max-w-2xl mx-auto">
+                    "ความล้มเหลวไม่ใช่จุดจบ แต่เป็นจุดเริ่มต้นของการเรียนรู้และเติบโต <br class="hidden md:block">จงลุกขึ้นและก้าวต่อไป"
+                </p>
+            </div>
+            
+            <div class="w-12 h-1 bg-pastel-pink mx-auto rounded-full mb-8"></div>
+            
+            <h2 class="text-2xl font-bold mb-1">ชลธิชา จันทร์เพ็ง <span class="text-pastel-pink font-normal text-lg">(น้ำ)</span></h2>
+            <p class="text-gray-400 text-sm mb-8">Academic Portfolio | สาธารณสุขชุมชน</p>
+            
+            <!-- Contact Icons (Placeholders) -->
+            <div class="flex justify-center gap-4 mb-8">
+                <a href="#" class="w-10 h-10 rounded-full bg-white/10 hover:bg-pastel-pink flex items-center justify-center transition-colors text-xl">
+                    <i class="ph-fill ph-facebook-logo"></i>
+                </a>
+                <a href="#" class="w-10 h-10 rounded-full bg-white/10 hover:bg-pastel-pink flex items-center justify-center transition-colors text-xl">
+                    <i class="ph-fill ph-envelope-simple"></i>
+                </a>
+                <a href="#" class="w-10 h-10 rounded-full bg-white/10 hover:bg-pastel-pink flex items-center justify-center transition-colors text-xl">
+                    <i class="ph-fill ph-phone"></i>
+                </a>
+            </div>
+            
+            <p class="text-xs text-gray-500">
+                &copy; 2024 Portfolio designed for minimal & cute aesthetic.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // ควบคุม Mobile Menu Toggle
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+        const icon = btn.querySelector('i');
+
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+            if(menu.classList.contains('hidden')){
+                icon.classList.remove('ph-x');
+                icon.classList.add('ph-list');
+            } else {
+                icon.classList.remove('ph-list');
+                icon.classList.add('ph-x');
+            }
+        });
+
+        // ปิดเมนูเมื่อคลิกลิงก์ (สำหรับมือถือ)
+        const mobileLinks = menu.querySelectorAll('a');
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                menu.classList.add('hidden');
+                icon.classList.remove('ph-x');
+                icon.classList.add('ph-list');
+            });
+        });
+
+        // เอฟเฟกต์ Navbar ตอน Scroll
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 10) {
+                nav.classList.add('shadow-sm');
+                nav.classList.replace('bg-white/80', 'bg-white/95');
+            } else {
+                nav.classList.remove('shadow-sm');
+                nav.classList.replace('bg-white/95', 'bg-white/80');
+            }
+        });
+    </script>
+</body>
+</html>
